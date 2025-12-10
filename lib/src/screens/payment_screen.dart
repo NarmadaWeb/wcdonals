@@ -235,12 +235,25 @@ class PaymentScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Pembayaran Berhasil!')));
-                        cart.clearCart();
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/home', (route) => false);
+                         showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: const Text('Pesanan Berhasil'),
+                            content: const Text(
+                                'Terima kasih! Pesanan Anda sedang diproses dan akan segera dikirim.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                  cart.clearCart();
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, '/home', (route) => false);
+                                },
+                                child: const Text('OK'),
+                              )
+                            ],
+                          ),
+                        );
                       },
                       child: const Text('Bayar Sekarang',
                           style: TextStyle(

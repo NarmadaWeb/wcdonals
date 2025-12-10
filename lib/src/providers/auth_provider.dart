@@ -46,6 +46,22 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateAvatar(String path) async {
+     if (_user != null) {
+      final updatedUser = _user!.copyWith(avatarUrl: path);
+      // We are just updating the local state and database here.
+      // Ideally we would upload to a server, but requirement says "local only".
+      // Since the User model likely maps to DB columns, we might need to store the local path in DB
+      // or just treat the 'avatarUrl' field as a local path if it doesn't start with http.
+
+      await updateProfile(updatedUser);
+
+      // Also save to shared prefs for redundancy if needed, but DB is better.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('local_avatar_path_${_user!.id}', path);
+     }
+  }
+
   Future<bool> register(String name, String email, String password) async {
     _setLoading(true);
     try {

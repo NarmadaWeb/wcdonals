@@ -1,15 +1,37 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/bottom_nav_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  Future<void> _pickImage(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Save path
+      // ignore: use_build_context_synchronously
+      Provider.of<AuthProvider>(context, listen: false).updateAvatar(pickedFile.path);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
     final user = auth.user;
+
+    ImageProvider? avatarImage;
+    if (user?.avatarUrl != null) {
+      if (user!.avatarUrl!.startsWith('http')) {
+        avatarImage = NetworkImage(user.avatarUrl!);
+      } else {
+        avatarImage = FileImage(File(user.avatarUrl!));
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -29,22 +51,28 @@ class ProfileScreen extends StatelessWidget {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                CircleAvatar(
-                  radius: 64,
-                  backgroundImage: NetworkImage(user?.avatarUrl ?? ''),
-                  onBackgroundImageError: (_, __) {},
-                  child: user?.avatarUrl == null
-                      ? const Icon(Icons.person, size: 64)
-                      : null,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
+                GestureDetector(
+                  onTap: () => _pickImage(context),
+                  child: CircleAvatar(
+                    radius: 64,
+                    backgroundImage: avatarImage,
+                    onBackgroundImageError: (_, __) {},
+                    child: avatarImage == null
+                        ? const Icon(Icons.person, size: 64)
+                        : null,
                   ),
-                  child: const Icon(Icons.edit, size: 16, color: Colors.black),
+                ),
+                GestureDetector(
+                  onTap: () => _pickImage(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    child: const Icon(Icons.edit, size: 16, color: Colors.black),
+                  ),
                 )
               ],
             ),
@@ -75,7 +103,9 @@ class ProfileScreen extends StatelessWidget {
               Navigator.pushNamed(context, '/settings');
             }),
             const SizedBox(height: 12),
-            _buildMenuItem(context, Icons.help_center, 'Bantuan', () {}),
+            _buildMenuItem(context, Icons.help_center, 'Bantuan', () {
+              Navigator.pushNamed(context, '/help');
+            }),
 
             const SizedBox(height: 32),
 
@@ -102,10 +132,17 @@ class ProfileScreen extends StatelessWidget {
         currentIndex: 3,
         onTap: (index) {
           if (index == 3) return;
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home');
+          switch (index) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/home');
+              break;
+            case 1:
+              Navigator.pushReplacementNamed(context, '/menu');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/orders');
+              break;
           }
-          // Handle others
         },
       ),
     );

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../models/product_model.dart';
 import '../widgets/bottom_nav_bar.dart';
+import '../widgets/skeleton_image.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,24 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onNavTap(int index) {
     if (index == 0) return; // Already here
-    // Navigation logic for other tabs
-    setState(() {
-      _currentIndex = index;
-    });
 
     switch (index) {
       case 1:
-        // Scroll to menu or just filter
+        Navigator.pushReplacementNamed(context, '/menu');
         break;
       case 2:
-        // Go to orders
-        // For this demo, maybe we just show a placeholder or navigate to cart if it was cart
-        Navigator.pushNamed(context, '/cart');
-        setState(() => _currentIndex = 0); // Reset
+        Navigator.pushReplacementNamed(context, '/orders');
         break;
       case 3:
-        Navigator.pushNamed(context, '/profile');
-        setState(() => _currentIndex = 0); // Reset
+        Navigator.pushReplacementNamed(context, '/profile');
         break;
     }
   }
@@ -133,24 +126,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(height: 24),
 
-                // Carousel (Simulated with SingleChildScrollView)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
+                // Carousel (PageView)
+                SizedBox(
+                  height: 180,
+                  child: PageView(
                     children: [
                       _buildPromoBanner(
                         context,
                         'Promo Spesial Hari Ini!',
                         'Diskon 50% untuk menu pilihan',
                         'https://lh3.googleusercontent.com/aida-public/AB6AXuA1qKbRYQUULXHkP3yQvZDltDaBy-y68_E__4FHf_Kwqxb7G15B0jsbwylqUtpZl4AyrSTwznjOF0tCAgYn-OhuHBFxRLRmAm4q0I_BBPULe9WqQ1FIPglk6q-JMosuO1rwJ8hq5-8TQRxWrGyRe83HxCUkVNyCLNl9VhjPSbMnI4vHFOiTC9kOIosTbdrWywLAIB-lN3toAaEOr0L-WjqUEJ41OcrF0H3BOp3P8WQkt_aDcobaySznNTnrHquW4A50Eu7qQ3iYig',
+                        '/menu',
                       ),
-                      const SizedBox(width: 16),
                       _buildPromoBanner(
                         context,
                         'Paket Hemat Keluarga',
                         'Pilihan tepat makan bersama',
                         'https://lh3.googleusercontent.com/aida-public/AB6AXuBUGMm7AOpCc_ztbQImX_ITIs7qVKjCqJPq5QRFbU5JgPaONqMbCclzltNAr-YyNB07Jiq_GMmumTNcfzjnM6r5_97Esj_DjR1D3RsreImK9ZKt8CnVQ7U-HcBfy3JXc7JITxjcD2o95UO7UHXIBWGmngqji6KTI2eMdEuNGxxNv52hp3n6tJbqIiqNaldw3olDej4pEF65Oh8JA6pHc6WOqP035ncDwzRG0xXbA6GxgT_uCDpfKRDnbQP49iakQfg3qDAh3L3kRg',
+                         '/menu',
+                      ),
+                       _buildPromoBanner(
+                        context,
+                        'Ayam Goreng Krispi',
+                        'Renyah di luar, lembut di dalam',
+                        'https://images.unsplash.com/photo-1569691105751-88df003de7a4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                         '/menu',
+                      ),
+                       _buildPromoBanner(
+                        context,
+                        'Minuman Segar',
+                        'Hilangkan dahagamu sekarang',
+                        'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                         '/menu',
                       ),
                     ],
                   ),
@@ -257,14 +264,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  image: DecorationImage(
-                                    image: NetworkImage(product.imageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
+                              child: NetworkImageWithSkeleton(
+                                imageUrl: product.imageUrl,
+                                borderRadius: 12,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -320,36 +322,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPromoBanner(
-      BuildContext context, String title, String subtitle, String imageUrl) {
-    return Container(
-      width: 300,
-      height: 150,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          image: DecorationImage(
-            image: NetworkImage(imageUrl),
-            fit: BoxFit.cover,
-          )),
+      BuildContext context, String title, String subtitle, String imageUrl, String route) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
       child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Colors.black.withOpacity(0.7), Colors.transparent],
-            )),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
           children: [
-            Text(title,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18)),
-            Text(subtitle,
-                style: const TextStyle(color: Colors.white70, fontSize: 12)),
+            Positioned.fill(
+              child: NetworkImageWithSkeleton(
+                imageUrl: imageUrl,
+                borderRadius: 16,
+              ),
+            ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                    )),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18)),
+                    Text(subtitle,
+                        style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
