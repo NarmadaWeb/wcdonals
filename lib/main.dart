@@ -20,6 +20,7 @@ import 'src/screens/splash_screen.dart';
 import 'src/models/product_model.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   // Initialize FFI for desktop support if needed (or testing in some environments)
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     sqfliteFfiInit();
