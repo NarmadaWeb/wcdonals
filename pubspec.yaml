@@ -17,6 +17,7 @@ dependencies:
   intl: ^0.18.0
   shared_preferences: ^2.2.0
   sqflite_common_ffi: ^2.2.5 # Useful for testing if environment supported, or just good practice
+  sqflite_common_ffi_web: ^0.4.0
 
 dev_dependencies:
   flutter_test:

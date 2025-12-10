@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 
+import 'src/services/db_init.dart';
 import 'src/providers/auth_provider.dart';
 import 'src/providers/cart_provider.dart';
 import 'src/utils/theme.dart';
@@ -21,11 +20,8 @@ import 'src/models/product_model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize FFI for desktop support if needed (or testing in some environments)
-  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
+  // Initialize Database Factory (Web or Native)
+  initializeDatabaseFactory();
 
   runApp(const WcDonaldsApp());
 }
