@@ -16,6 +16,7 @@ import 'src/screens/payment_screen.dart';
 import 'src/screens/profile_screen.dart';
 import 'src/screens/edit_profile_screen.dart';
 import 'src/screens/settings_screen.dart';
+import 'src/screens/splash_screen.dart';
 import 'src/models/product_model.dart';
 
 void main() {
@@ -44,9 +45,11 @@ class WcDonaldsApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
-        initialRoute: '/welcome',
+        initialRoute: '/splash',
         onGenerateRoute: (settings) {
             switch (settings.name) {
+                case '/splash':
+                    return MaterialPageRoute(builder: (_) => const SplashScreen());
                 case '/welcome':
                     return MaterialPageRoute(builder: (_) => const WelcomeScreen());
                 case '/auth':
