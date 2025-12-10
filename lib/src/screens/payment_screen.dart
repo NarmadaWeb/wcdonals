@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/order_provider.dart';
+import '../providers/notification_provider.dart';
+import '../models/order_model.dart';
+import '../models/notification_model.dart';
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
@@ -235,23 +239,82 @@ class PaymentScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: () {
-                         showDialog(
+                        // Create Order
+                        final order = Order(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          items: List.from(cart.items),
+                          totalAmount: total,
+                          date: DateTime.now(),
+                          status: OrderStatus.pending,
+                        );
+
+                        // Add to Order History
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .addOrder(order);
+
+                        // Add Notification
+                        Provider.of<NotificationProvider>(context, listen: false)
+                            .addNotification(AppNotification(
+                              id: DateTime.now().toString(),
+                              title: 'Pesanan Berhasil',
+                              message: 'Pesanan #${order.id} berhasil dibuat dan sedang diproses.',
+                              date: DateTime.now()
+                            ));
+
+                        showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (ctx) => AlertDialog(
-                            title: const Text('Pesanan Berhasil'),
-                            content: const Text(
-                                'Terima kasih! Pesanan Anda sedang diproses dan akan segera dikirim.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                  cart.clearCart();
-                                  Navigator.pushNamedAndRemoveUntil(
-                                      context, '/home', (route) => false);
-                                },
-                                child: const Text('OK'),
-                              )
-                            ],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: 16),
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.check,
+                                      color: Colors.green, size: 48),
+                                ),
+                                const SizedBox(height: 24),
+                                const Text(
+                                  'Pesanan Berhasil!',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Terima kasih telah memesan di WcDonalds. Makananmu akan segera disiapkan.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                const SizedBox(height: 24),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                      cart.clearCart();
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/home', (route) => false);
+                                    },
+                                    child: const Text('Kembali ke Beranda'),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },

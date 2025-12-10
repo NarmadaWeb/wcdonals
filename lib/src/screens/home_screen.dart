@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/cart_provider.dart';
 import '../models/product_model.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/skeleton_image.dart';
@@ -66,8 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(user?.avatarUrl ?? ''),
-                        onBackgroundImageError: (_, __) => {},
+                        backgroundImage: (user?.avatarUrl != null)
+                            ? (user!.avatarUrl!.startsWith('http')
+                                ? NetworkImage(user.avatarUrl!)
+                                : FileImage(File(user.avatarUrl!))
+                                    as ImageProvider)
+                            : null,
+                        onBackgroundImageError: (_, __) {},
                         child: user?.avatarUrl == null
                             ? const Icon(Icons.person)
                             : null,
@@ -101,13 +108,47 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.notifications_outlined),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.shopping_cart_outlined),
                         onPressed: () {
-                          Navigator.pushNamed(context, '/cart');
+                          Navigator.pushNamed(context, '/notification');
                         },
+                      ),
+                      Consumer<CartProvider>(
+                        builder: (context, cart, child) => Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.shopping_cart_outlined),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/cart');
+                              },
+                            ),
+                            if (cart.items.isNotEmpty)
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Text(
+                                    '${cart.items.length}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
