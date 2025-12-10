@@ -165,8 +165,9 @@ class CartScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pushNamed(context, '/payment');
                           },
-                          child: const Text('Lanjutkan ke Pembayaran',
-                              style: TextStyle(
+                          child: Text(
+                              'Checkout (${cart.items.fold(0, (sum, item) => sum + item.quantity)} item)',
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16)),

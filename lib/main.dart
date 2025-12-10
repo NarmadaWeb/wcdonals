@@ -5,6 +5,8 @@ import 'src/services/db_init.dart';
 import 'src/providers/auth_provider.dart';
 import 'src/providers/cart_provider.dart';
 import 'src/providers/theme_provider.dart';
+import 'src/providers/order_provider.dart';
+import 'src/providers/notification_provider.dart';
 import 'src/utils/theme.dart';
 import 'src/screens/welcome_screen.dart';
 import 'src/screens/auth_screen.dart';
@@ -19,6 +21,7 @@ import 'src/screens/splash_screen.dart';
 import 'src/screens/menu_screen.dart';
 import 'src/screens/order_screen.dart';
 import 'src/screens/help_screen.dart';
+import 'src/screens/notification_screen.dart';
 import 'src/models/product_model.dart';
 
 void main() {
@@ -39,16 +42,32 @@ class WcDonaldsApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
             title: 'WcDonalds',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
             initialRoute: '/splash',
+            theme: AppTheme.lightTheme.copyWith(
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                },
+              ),
+            ),
+            darkTheme: AppTheme.darkTheme.copyWith(
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                },
+              ),
+            ),
             onGenerateRoute: (settings) {
               switch (settings.name) {
                 case '/splash':
@@ -80,6 +99,9 @@ class WcDonaldsApp extends StatelessWidget {
                   return MaterialPageRoute(builder: (_) => const SettingsScreen());
                 case '/help':
                   return MaterialPageRoute(builder: (_) => const HelpScreen());
+                case '/notification':
+                  return MaterialPageRoute(
+                      builder: (_) => const NotificationScreen());
                 default:
                   return MaterialPageRoute(builder: (_) => const WelcomeScreen());
               }
