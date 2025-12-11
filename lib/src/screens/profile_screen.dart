@@ -128,23 +128,6 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 3,
-        onTap: (index) {
-          if (index == 3) return;
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/home');
-              break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/menu');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/orders');
-              break;
-          }
-        },
-      ),
     );
   }
 

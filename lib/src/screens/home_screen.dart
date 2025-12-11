@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
+import '../providers/notification_provider.dart';
 import '../models/product_model.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/skeleton_image.dart';
@@ -15,8 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
   final List<String> _categories = [
     'Semua',
     'Burger',
@@ -26,22 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'Dessert'
   ];
   String _selectedCategory = 'Semua';
-
-  void _onNavTap(int index) {
-    if (index == 0) return; // Already here
-
-    switch (index) {
-      case 1:
-        Navigator.pushReplacementNamed(context, '/menu');
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, '/orders');
-        break;
-      case 3:
-        Navigator.pushReplacementNamed(context, '/profile');
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Stack(children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 100), // Space for bottom nav
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top App Bar
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top App Bar
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
                       CircleAvatar(
@@ -106,11 +88,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.notifications_outlined),
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/notification');
-                        },
+                      Consumer<NotificationProvider>(
+                        builder: (context, notifProvider, child) => Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.notifications_outlined),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/notification');
+                              },
+                            ),
+                            if (notifProvider.unreadCount > 0)
+                              Positioned(
+                                right: 8,
+                                top: 8,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Text(
+                                    '${notifProvider.unreadCount}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                       Consumer<CartProvider>(
                         builder: (context, cart, child) => Stack(
@@ -354,16 +368,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: CustomBottomNavBar(
-              currentIndex: _currentIndex,
-              onTap: _onNavTap,
-            ),
+            ],
           ),
-        ]),
+        ),
       ),
     );
   }

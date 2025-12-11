@@ -16,11 +16,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final List<String> _selectedAddOns = [];
   int _quantity = 1;
 
-  final Map<String, int> _addOnPrices = {
-    'Ekstra Keju': 3000,
-    'Ekstra Acar': 0,
-  };
-
   void _toggleAddOn(String name) {
     setState(() {
       if (_selectedAddOns.contains(name)) {
@@ -29,6 +24,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         _selectedAddOns.add(name);
       }
     });
+  }
+
+  int get _totalPrice {
+    int price = widget.product.price.toInt();
+    if (_selectedSize == 'Large') {
+      price += 5000;
+    }
+    for (var addOnName in _selectedAddOns) {
+       final addOn = widget.product.allowedAddOns.firstWhere(
+        (a) => a.name == addOnName,
+        orElse: () => AddOn(name: '', price: 0),
+      );
+      price += addOn.price;
+    }
+    return price * _quantity;
   }
 
   void _addToCart() {
@@ -170,7 +180,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Rp ${widget.product.price.toStringAsFixed(0)}',
+                        'Rp ${_totalPrice.toStringAsFixed(0)}', // Update dynamic price
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 22,
@@ -205,17 +215,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      Text(
-                        'Tambahan',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 12),
-                      _buildAddOnOption('Ekstra Keju', 3000),
-                      const SizedBox(height: 12),
-                      _buildAddOnOption('Ekstra Acar', 0),
+                      if (widget.product.allowedAddOns.isNotEmpty) ...[
+                        Text(
+                          'Tambahan',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 12),
+                        ...widget.product.allowedAddOns.map(
+                          (addOn) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: _buildAddOnOption(addOn.name, addOn.price),
+                          ),
+                        ),
+                      ],
 
                       const SizedBox(height: 100), // Space for bottom bar
                     ],

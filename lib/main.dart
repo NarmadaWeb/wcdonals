@@ -22,6 +22,7 @@ import 'src/screens/menu_screen.dart';
 import 'src/screens/order_screen.dart';
 import 'src/screens/help_screen.dart';
 import 'src/screens/notification_screen.dart';
+import 'src/screens/main_screen.dart';
 import 'src/models/product_model.dart';
 
 void main() {
@@ -77,7 +78,7 @@ class WcDonaldsApp extends StatelessWidget {
                 case '/auth':
                   return MaterialPageRoute(builder: (_) => const AuthScreen());
                 case '/home':
-                  return MaterialPageRoute(builder: (_) => const HomeScreen());
+                  return MaterialPageRoute(builder: (_) => const MainScreen());
                 case '/product':
                   final product = settings.arguments as Product;
                   return MaterialPageRoute(

@@ -1,3 +1,10 @@
+class AddOn {
+  final String name;
+  final int price;
+
+  AddOn({required this.name, required this.price});
+}
+
 class Product {
   final String id;
   final String name;
@@ -5,6 +12,7 @@ class Product {
   final double price;
   final String imageUrl;
   final String category; // 'Burger', 'Ayam', 'Kentang', 'Minuman', 'Dessert'
+  final List<AddOn> allowedAddOns;
 
   Product({
     required this.id,
@@ -13,6 +21,7 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.category,
+    this.allowedAddOns = const [],
   });
 }
 
@@ -27,6 +36,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuAkgXuFSM2KseLEw8BtIBjAqHNi_Bs90xS74lexgI1rjtfvm4j4P4NFAMRQDaaoTsMhiSK70qF4Ne5jg_6yJsidaToDLYzKDfZBN0IiAyD4TbM26wH1b6d_bQ3xNoLHnGPV86q122F2OH0yN7gbi03BJJJzLt2VJycL2JdQxiaVgUxVv8Ii8J7taiWYPXFEVVWaYfI6JiYpWGchumnvJEjpYlWO1iUhODOC0gwlASyfgouoIQPbr9C9ol3dJoafVYdUh554sh0tlw',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
   Product(
     id: '2',
@@ -37,6 +51,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuA5P7IeqDxvH3CJ_bG2JAp_gJP1DnsJVpFZVCJGEm5HPmaNrceOBWYA2QM-nGVlJZN8UGPRQDpWXCiTOkJcbDGC7ZGl6gXGqAMfFCYVNbE0Q4G3S3TsVH7VhQkdyaLVjZyiT-797xnPRPtm2MdLnwrps6QutSOnX82KY9kinWuXm1XfovNd7hrdaOyaePOFOqvP4QguhH5CXPMeaOfacl3bEDGKg7LDBWroVYExXbu7nalMEwlJ_25Np8YsQHwScKUdN_B41yjctA',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
   Product(
     id: '3',
@@ -46,6 +65,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuBfzI4nodrd0KnNqfJ6uXx04VTZBcHls2UKOgHidTRZpKSdjmvj_vQSK2jhiGEE2TeXf8ouOHzLQh6QXY_w3B2c661drhFen5lk8iRaAAXeCDN3Q2xJomMJFxR6ciw1PyVTalCZZXjY_N69ZAg8loZ-C-sPBmM470njaqHR5HWZGFF9rWCHwbiqQ95kwPljicQ7z6Ff9E2USsvjC0DwK-ojrCOOlHukLpziZXluu3Az4aIILYv-1XiV7UbTg2Jp1tASaxAZBfdkdA',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
   Product(
     id: '4',
@@ -55,6 +79,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuB0lw0kcIE3Esz9Rgyk5XcRf8shSJNsfsPokOwj75OYmVM62238amhChCmHxkOgFQJskkjCSpFQ4hbKP8MpfJxN7jXHbTYsd_sAlWh26PWfTUO5AmxnCaP7j9Kufm7dCTuUmYngnF7zs2iG8h_TiQ-YIBW0_mAv-k3M__gSfkYAm2-Uy2F9YfnwRiUk9SemtTbDsonrdK3UzC0Qu7EwShsCD3aNnKebyGwC3c5uU9h1UGn3K2x-SJbxcyESEMbYHBEdGKiMbvGL2Q',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
   Product(
     id: '5',
@@ -64,6 +93,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuBUj2VJfv9SDuNUhnQWcFdnTX37dR03ohMFAfbe5FIYrT9PZumpNwBPnGsL10rkG-PGvZ7kumWlERbOHwlH8pR9DCAO6kCfkm4gvwoteJ921cBk_-xwAA-TqsbP-t4ctoq_nWE4MF1pWy1GDYqw3oS6nAPtNQvXaWkVP-e_SyzKLm5lT_4pAH9HgxeRiqJeN6QiReeOe02KSpr66BqxzghAwgw8edu961NL0X09UDpVeJVvmM4hTC5okjX-IDvcMW8o-WnwZ1DwVA',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
   Product(
     id: '6',
@@ -73,6 +107,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/Pbhfn8pDtbAamnYUj4GIxlXOYUKaE9YrbdmpNetZqNE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNDcx/MTY0NDk4L3Bob3Rv/L2NoaWNrZW4taGFt/YnVyZ2VyLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz14OEVW/N2sxSzdsajVuSDVL/WkJZaTVOUHJvUkht/eFRKY2xDX09zeGdU/VGhFPQ',
     category: 'Burger',
+    allowedAddOns: [
+      AddOn(name: 'Ekstra Keju', price: 5000),
+      AddOn(name: 'Ekstra Patty', price: 15000),
+      AddOn(name: 'Acar', price: 0),
+    ],
   ),
 
   // --- AYAM (4 Items) ---
@@ -84,6 +123,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/htQWOuh5wXipYRhqXV0YubxyYCF3IXoxS2GxyYoZnCU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzE2LzY1Lzc3LzI5/LzM2MF9GXzE2NjU3/NzI5NjZfYzRFbGl3/SU01SGh5ME9WZXNM/bDBSaHpQZnVJZUti/cW4uanBn',
     category: 'Ayam',
+    allowedAddOns: [
+      AddOn(name: 'Saus BBQ', price: 3000),
+      AddOn(name: 'Saus Keju', price: 4000),
+      AddOn(name: 'Nasi Putih', price: 6000),
+    ],
   ),
   Product(
     id: '8',
@@ -93,6 +137,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/JfsmCrH5qRueY5vKiK72wBw648psVTI5S9AHlvnuAw4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jbmMt/bWFnYXppbmUub3Jh/bWlsYW5kLmNvbS9w/YXJlbnRpbmcvaW1h/Z2VzL1NjcmVlbnNo/b3RfNDFfMGF5UUpq/dC53aWR0aC04MDAu/Zm9ybWF0LXdlYnAu/d2VicA',
     category: 'Ayam',
+    allowedAddOns: [
+      AddOn(name: 'Saus BBQ', price: 3000),
+      AddOn(name: 'Saus Keju', price: 4000),
+      AddOn(name: 'Nasi Putih', price: 6000),
+    ],
   ),
   Product(
     id: '9',
@@ -122,6 +171,10 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/IS4LAMVEKDA7FrIDAcZ2ueaHAF3K1OUfNgMreHonCgQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dC5rb21wYXMuY29t/L2Nyb3BzL3VpZ2xR/ZU5TOHliSV9rTVRf/WE1yNGk1UXNwRT0v/MHgyOjg4MHg1ODgv/MTIwMHg4MDAvZGF0/YS9waG90by8yMDIy/LzA5LzE0LzYzMjE1/OWNkODExZjIuanBn',
     category: 'Kentang',
+    allowedAddOns: [
+      AddOn(name: 'Saus Keju', price: 4000),
+      AddOn(name: 'Bumbu BBQ', price: 2000),
+    ],
   ),
   Product(
     id: '12',
@@ -151,6 +204,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/lNLpc0Hyd6LbfVuK-2oGbmSZlSOUZp24I0RVt-7D-_Q/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90YXN0/eXNuYWNrLmlkL2Nk/bi9zaG9wL2ZpbGVz/LzFfZGMyMmQwYjAt/NDI5Ni00NGE5LWI5/OTAtZDMxZGIyMTdl/NDQwXzEwMDB4MTAw/MC5wbmc_dj0xNzI4/OTAwODQ3',
     category: 'Minuman',
+    allowedAddOns: [
+      AddOn(name: 'Less Ice', price: 0),
+      AddOn(name: 'Extra Ice', price: 0),
+      AddOn(name: 'Upsize', price: 5000),
+    ],
   ),
   Product(
     id: '15',
@@ -160,6 +218,11 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/etuJ4z5BgngeUstAWJ0jI08dvECHj_p4TprIHN8fNP0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMDQv/OTM1LzY1OC9zbWFs/bC9nbGFzcy1vZi1p/Y2UtbGVtb24tdGVh/LXBob3RvLmpwZw',
     category: 'Minuman',
+    allowedAddOns: [
+      AddOn(name: 'Less Ice', price: 0),
+      AddOn(name: 'Extra Ice', price: 0),
+      AddOn(name: 'Upsize', price: 5000),
+    ],
   ),
   Product(
     id: '16',
@@ -169,6 +232,10 @@ final List<Product> mockProducts = [
     imageUrl:
         'https://imgs.search.brave.com/my6r6ZbTDfQp9S9z2OMZksGUUogJA7RTrWie7puXsus/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzdlLzAx/Lzc0LzdlMDE3NDE2/YmI4Y2VhZDI4Yzc3/ZDViYjEyZmNkZmNh/LmpwZw',
     category: 'Minuman',
+    allowedAddOns: [
+      AddOn(name: 'Extra Sugar', price: 0),
+      AddOn(name: 'Less Sugar', price: 0),
+    ],
   ),
 
   // --- DESSERT (3 Items) ---
