@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/order_provider.dart';
 import '../models/order_model.dart';
-import '../widgets/bottom_nav_bar.dart';
 import 'package:intl/intl.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -15,7 +14,8 @@ class OrderScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pesanan Saya', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Pesanan Saya',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -123,7 +123,7 @@ class OrderScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
                   children: [
-                     Container(
+                    Container(
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
@@ -138,9 +138,12 @@ class OrderScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(item.product.name,
-                              style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text('${item.quantity}x  @ Rp ${item.product.price.toStringAsFixed(0)}',
-                              style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          Text(
+                              '${item.quantity}x  @ Rp ${item.product.price.toStringAsFixed(0)}',
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 12)),
                         ],
                       ),
                     ),

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/bottom_nav_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -15,7 +14,8 @@ class ProfileScreen extends StatelessWidget {
     if (pickedFile != null) {
       // Save path
       // ignore: use_build_context_synchronously
-      Provider.of<AuthProvider>(context, listen: false).updateAvatar(pickedFile.path);
+      Provider.of<AuthProvider>(context, listen: false)
+          .updateAvatar(pickedFile.path);
     }
   }
 
@@ -71,7 +71,8 @@ class ProfileScreen extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                     ),
-                    child: const Icon(Icons.edit, size: 16, color: Colors.black),
+                    child:
+                        const Icon(Icons.edit, size: 16, color: Colors.black),
                   ),
                 )
               ],

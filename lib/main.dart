@@ -10,7 +10,6 @@ import 'src/providers/notification_provider.dart';
 import 'src/utils/theme.dart';
 import 'src/screens/welcome_screen.dart';
 import 'src/screens/auth_screen.dart';
-import 'src/screens/home_screen.dart';
 import 'src/screens/product_detail_screen.dart';
 import 'src/screens/cart_screen.dart';
 import 'src/screens/payment_screen.dart';
@@ -72,9 +71,11 @@ class WcDonaldsApp extends StatelessWidget {
             onGenerateRoute: (settings) {
               switch (settings.name) {
                 case '/splash':
-                  return MaterialPageRoute(builder: (_) => const SplashScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const SplashScreen());
                 case '/welcome':
-                  return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const WelcomeScreen());
                 case '/auth':
                   return MaterialPageRoute(builder: (_) => const AuthScreen());
                 case '/home':
@@ -90,21 +91,25 @@ class WcDonaldsApp extends StatelessWidget {
                 case '/orders':
                   return MaterialPageRoute(builder: (_) => const OrderScreen());
                 case '/payment':
-                  return MaterialPageRoute(builder: (_) => const PaymentScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const PaymentScreen());
                 case '/profile':
-                  return MaterialPageRoute(builder: (_) => const ProfileScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const ProfileScreen());
                 case '/edit_profile':
                   return MaterialPageRoute(
                       builder: (_) => const EditProfileScreen());
                 case '/settings':
-                  return MaterialPageRoute(builder: (_) => const SettingsScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const SettingsScreen());
                 case '/help':
                   return MaterialPageRoute(builder: (_) => const HelpScreen());
                 case '/notification':
                   return MaterialPageRoute(
                       builder: (_) => const NotificationScreen());
                 default:
-                  return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+                  return MaterialPageRoute(
+                      builder: (_) => const WelcomeScreen());
               }
             },
           );

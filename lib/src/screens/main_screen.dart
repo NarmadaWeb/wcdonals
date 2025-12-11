@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'home_screen.dart';
 import 'menu_screen.dart';

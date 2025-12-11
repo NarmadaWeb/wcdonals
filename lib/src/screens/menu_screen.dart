@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/cart_provider.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/skeleton_image.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -33,7 +32,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu Kami', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Menu Kami',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         automaticallyImplyLeading: false,
         actions: [
@@ -98,9 +98,10 @@ class _MenuScreenState extends State<MenuScreen> {
                     },
                     selectedColor: Theme.of(context).primaryColor,
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyMedium?.color,
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: isSelected
+                            ? Colors.white
+                            : Theme.of(context).textTheme.bodyMedium?.color,
+                        fontWeight: FontWeight.bold),
                     checkmarkColor: Colors.white,
                   ),
                 );
@@ -122,10 +123,12 @@ class _MenuScreenState extends State<MenuScreen> {
                 final product = displayedProducts[index];
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/product', arguments: product);
+                    Navigator.pushNamed(context, '/product',
+                        arguments: product);
                   },
                   child: Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     elevation: 4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -145,18 +148,19 @@ class _MenuScreenState extends State<MenuScreen> {
                                 product.name,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               const SizedBox(height: 4),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Rp ${product.price.toStringAsFixed(0)}',
                                     style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColor
-                                    ),
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                   const Icon(Icons.add_circle, size: 24),
                                 ],
