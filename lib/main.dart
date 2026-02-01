@@ -27,9 +27,11 @@ import 'src/screens/admin/manage_menu_screen.dart';
 import 'src/screens/admin/manage_orders_screen.dart';
 import 'src/screens/admin/edit_product_screen.dart';
 import 'src/models/product_model.dart';
+import 'src/services/db_init.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDatabaseFactory();
   // Database initialized lazily via DatabaseHelper
 
   runApp(const WcDonaldsApp());
