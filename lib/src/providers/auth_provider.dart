@@ -18,6 +18,19 @@ class AuthProvider with ChangeNotifier {
     final userId = prefs.getInt('userId');
     if (userId == null) return false;
 
+    // Admin Auto Login
+    if (userId == 999999) {
+      _user = User(
+        id: 999999,
+        email: 'admin@gmail.com',
+        password: 'admin123',
+        name: 'Administrator',
+        avatarUrl: 'https://cdn-icons-png.flaticon.com/512/2206/2206368.png',
+      );
+      notifyListeners();
+      return true;
+    }
+
     final user = await DatabaseHelper.instance.readUser(userId);
     if (user != null) {
       _user = user;
@@ -30,6 +43,21 @@ class AuthProvider with ChangeNotifier {
   Future<bool> login(String email, String password) async {
     _setLoading(true);
     try {
+      // Admin Check
+      if (email == 'admin@gmail.com' && password == 'admin123') {
+        _user = User(
+          id: 999999,
+          email: email,
+          password: password,
+          name: 'Administrator',
+          avatarUrl: 'https://cdn-icons-png.flaticon.com/512/2206/2206368.png',
+        );
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('userId', 999999);
+        notifyListeners();
+        return true;
+      }
+
       final user = await DatabaseHelper.instance.login(email, password);
       if (user != null) {
         _user = user;

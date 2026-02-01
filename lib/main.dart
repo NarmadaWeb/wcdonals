@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'src/services/db_init.dart';
 import 'src/providers/auth_provider.dart';
 import 'src/providers/cart_provider.dart';
 import 'src/providers/theme_provider.dart';
 import 'src/providers/order_provider.dart';
 import 'src/providers/notification_provider.dart';
+import 'src/providers/menu_provider.dart';
 import 'src/utils/theme.dart';
 import 'src/screens/welcome_screen.dart';
 import 'src/screens/auth_screen.dart';
@@ -22,12 +22,15 @@ import 'src/screens/order_screen.dart';
 import 'src/screens/help_screen.dart';
 import 'src/screens/notification_screen.dart';
 import 'src/screens/main_screen.dart';
+import 'src/screens/admin/admin_dashboard.dart';
+import 'src/screens/admin/manage_menu_screen.dart';
+import 'src/screens/admin/manage_orders_screen.dart';
+import 'src/screens/admin/edit_product_screen.dart';
 import 'src/models/product_model.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize Database Factory (Web or Native)
-  initializeDatabaseFactory();
+  // Database initialized lazily via DatabaseHelper
 
   runApp(const WcDonaldsApp());
 }
@@ -44,6 +47,7 @@ class WcDonaldsApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => MenuProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
@@ -107,6 +111,19 @@ class WcDonaldsApp extends StatelessWidget {
                 case '/notification':
                   return MaterialPageRoute(
                       builder: (_) => const NotificationScreen());
+                case '/admin_dashboard':
+                  return MaterialPageRoute(
+                      builder: (_) => const AdminDashboard());
+                case '/admin_menu':
+                  return MaterialPageRoute(
+                      builder: (_) => const ManageMenuScreen());
+                case '/admin_orders':
+                  return MaterialPageRoute(
+                      builder: (_) => const ManageOrdersScreen());
+                case '/edit_product':
+                  final product = settings.arguments as Product?;
+                  return MaterialPageRoute(
+                      builder: (_) => EditProductScreen(product: product));
                 default:
                   return MaterialPageRoute(
                       builder: (_) => const WelcomeScreen());

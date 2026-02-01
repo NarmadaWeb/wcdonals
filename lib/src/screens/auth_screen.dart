@@ -45,7 +45,11 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     if (success && mounted) {
-      Navigator.pushReplacementNamed(context, '/home');
+      if (auth.user?.id == 999999) {
+        Navigator.pushReplacementNamed(context, '/admin_dashboard');
+      } else {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_isLogin ? 'Login Gagal' : 'Registrasi Gagal')),

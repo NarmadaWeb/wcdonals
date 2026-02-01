@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/notification_provider.dart';
+import '../providers/menu_provider.dart';
 import '../models/product_model.dart';
 import '../widgets/skeleton_image.dart';
 
@@ -28,11 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context).user;
+    final menuProvider = Provider.of<MenuProvider>(context);
 
-    List<Product> displayedProducts = mockProducts;
+    List<Product> displayedProducts = menuProvider.products;
     if (_selectedCategory != 'Semua') {
       displayedProducts =
-          mockProducts.where((p) => p.category == _selectedCategory).toList();
+          displayedProducts.where((p) => p.category == _selectedCategory).toList();
     }
 
     return Scaffold(
