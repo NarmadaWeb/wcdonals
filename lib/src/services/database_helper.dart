@@ -12,7 +12,11 @@ class DatabaseHelper implements DataService {
   late final DataService _service;
 
   DatabaseHelper._init() {
-    _service = SqliteService();
+    if (kIsWeb) {
+      _service = JsonService();
+    } else {
+      _service = SqliteService();
+    }
   }
 
   @override
