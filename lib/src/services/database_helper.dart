@@ -1,100 +1,51 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:flutter/foundation.dart';
+import 'data_service.dart';
+import 'sqlite_service.dart';
+import 'json_service.dart';
 import '../models/user_model.dart';
+import '../models/product_model.dart';
+import '../models/order_model.dart';
 
-class DatabaseHelper {
+class DatabaseHelper implements DataService {
   static final DatabaseHelper instance = DatabaseHelper._init();
-  static Database? _database;
 
-  DatabaseHelper._init();
+  late final DataService _service;
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDB('wcdonalds.db');
-    return _database!;
-  }
-
-  Future<Database> _initDB(String filePath) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, filePath);
-
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
-  }
-
-  Future _createDB(Database db, int version) async {
-    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-    const textType = 'TEXT';
-    // const integerType = 'INTEGER';
-
-    await db.execute('''
-CREATE TABLE users (
-  id $idType,
-  email $textType NOT NULL UNIQUE,
-  password $textType NOT NULL,
-  name $textType NOT NULL,
-  phone $textType,
-  address $textType,
-  avatar_url $textType
-)
-''');
-  }
-
-  Future<User> createUser(User user) async {
-    final db = await instance.database;
-    final id = await db.insert('users', user.toMap());
-    return user.copyWith(id: id);
-  }
-
-  Future<User?> readUser(int id) async {
-    final db = await instance.database;
-    final maps = await db.query(
-      'users',
-      columns: [
-        'id',
-        'email',
-        'password',
-        'name',
-        'phone',
-        'address',
-        'avatar_url'
-      ],
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
+  DatabaseHelper._init() {
+    if (kIsWeb) {
+      _service = JsonService();
     } else {
-      return null;
+      _service = SqliteService();
     }
   }
 
-  Future<User?> login(String email, String password) async {
-    final db = await instance.database;
-    final maps = await db.query(
-      'users',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
+  @override
+  Future<User> createUser(User user) => _service.createUser(user);
 
-    if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
-    } else {
-      return null;
-    }
-  }
+  @override
+  Future<User?> readUser(int id) => _service.readUser(id);
 
-  Future<int> updateUser(User user) async {
-    final db = await instance.database;
-    return db.update(
-      'users',
-      user.toMap(),
-      where: 'id = ?',
-      whereArgs: [user.id],
-    );
-  }
+  @override
+  Future<User?> login(String email, String password) => _service.login(email, password);
+
+  @override
+  Future<int> updateUser(User user) => _service.updateUser(user);
+
+  @override
+  Future<List<Product>> getProducts() => _service.getProducts();
+
+  @override
+  Future<void> addProduct(Product product) => _service.addProduct(product);
+
+  @override
+  Future<void> updateProduct(Product product) => _service.updateProduct(product);
+
+  @override
+  Future<void> deleteProduct(String id) => _service.deleteProduct(id);
+
+  @override
+  Future<List<Order>> getOrders() => _service.getOrders();
+
+  @override
+  Future<void> addOrder(Order order) => _service.addOrder(order);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/cart_provider.dart';
+import '../providers/menu_provider.dart';
 import '../widgets/skeleton_image.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -24,10 +25,11 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Product> displayedProducts = mockProducts;
+    final menuProvider = Provider.of<MenuProvider>(context);
+    List<Product> displayedProducts = menuProvider.products;
     if (_selectedCategory != 'Semua') {
       displayedProducts =
-          mockProducts.where((p) => p.category == _selectedCategory).toList();
+          displayedProducts.where((p) => p.category == _selectedCategory).toList();
     }
 
     return Scaffold(
